@@ -32,4 +32,10 @@ public class UserServiceImpl implements UserService {
         }
         else return Optional.empty();
     }
+
+    @Override
+    public Optional<User> getUserByLogin(String login){
+        User user = userRepository.findByLogin(login).orElseThrow(IllegalArgumentException::new);
+        return Optional.of(user);
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.itis.model.Role;
 import ru.itis.model.State;
 import ru.itis.model.User;
 import ru.itis.repository.UserRepository;
@@ -23,11 +24,11 @@ public class UserRepositoryJdbcTemplateImpl implements UserRepository {
     //language=SQL
     private static final String SQL_SELECT_ALL = "select * from users";
     //language=SQL
-    private static final String SQL_INSERT = "insert into users(email, password, state, confirmcode, login) values (?, ?, ?, ?,?)";
+    private static final String SQL_INSERT = "insert into users(email, password, state, confirmcode, login, role) values (?, ?, ?, ?,?,?)";
     //language=SQL
     private static final String SQL_SELECT_BY_LOGIN = "select * from users where login = ?";
     //language=SQL
-    private static final String SQL_UPDATE = "update users set email = ?, password = ?,  state = ?, confirmcode = ?, login = ? where id = ?";
+    private static final String SQL_UPDATE = "update users set email = ?, password = ?,  state = ?, confirmcode = ?, login = ?, role = ? where id = ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -41,6 +42,7 @@ public class UserRepositoryJdbcTemplateImpl implements UserRepository {
                     .login(row.getString("login"))
                     .state(State.valueOf(row.getString("state")))
                     .confirmCode(row.getString("confirmcode"))
+                    .role(Role.valueOf(row.getString("role")))
                     .build();
 
     public Optional<User> find(Integer id) {
@@ -66,6 +68,7 @@ public class UserRepositoryJdbcTemplateImpl implements UserRepository {
             statement.setString(3, String.valueOf(entity.getState()));
             statement.setString(4, entity.getConfirmCode());
             statement.setString(5, entity.getLogin());
+            statement.setString(6, String.valueOf(entity.getRole()));
             return statement;
         });
     }
@@ -84,7 +87,8 @@ public class UserRepositoryJdbcTemplateImpl implements UserRepository {
             statement.setString(3, String.valueOf(entity.getState()));
             statement.setString(4, entity.getConfirmCode());
             statement.setString(5, entity.getLogin());
-            statement.setInt(6, entity.getId());
+            statement.setString(6, String.valueOf(entity.getRole()));
+            statement.setInt(7, entity.getId());
             return statement;
         });
     }

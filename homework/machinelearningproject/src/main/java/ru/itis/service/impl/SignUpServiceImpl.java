@@ -1,8 +1,10 @@
 package ru.itis.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.itis.Dto.UserConfirmDto;
+import ru.itis.model.Role;
 import ru.itis.model.State;
 import ru.itis.model.User;
 import ru.itis.repository.UserRepository;
@@ -18,14 +20,17 @@ public class SignUpServiceImpl implements SignUpService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserConfirmDto signUp(HttpServletRequest req) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder encoder;
 
+    public UserConfirmDto signUp(HttpServletRequest req) {
+        
         userRepository.save( User.builder().email(req.getParameter("email"))
                 .password(encoder.encode(req.getParameter("password")))
                 .login(req.getParameter("login"))
                 .confirmCode(UUID.randomUUID().toString())
                 .state(State.NOT_CONFIRMED)
+                .role(Role.USER)
                 .build());
         return UserConfirmDto.from(userRepository.findByLogin(req.getParameter("login")).get());
     }

@@ -20,6 +20,7 @@ public class User {
     private String login;
     private State state;
     private String confirmCode;
+    private Role role;
 
 
 

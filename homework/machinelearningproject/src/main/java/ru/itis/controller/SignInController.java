@@ -26,20 +26,20 @@ public class SignInController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/signIn", method = RequestMethod.POST)
-    protected String signIn(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        UserConfirmDto user = service.signIn(req);
-
-        if (user == null) {
-            return "redirect:" + req.getScheme() + "://localhost:8088/signIn";
-        } else if (user.getState().equals(State.NOT_CONFIRMED)){
-            session.setAttribute("current_user", user);
-            return "redirect:" + req.getScheme() + "://localhost:8088/confirm";
-        }
-        else {
-            session.setAttribute("current_user", user);
-            return "redirect:" + req.getScheme() + "://localhost:8088/profile";
-        }
-    }
+//    @RequestMapping(value = "/signIn", method = RequestMethod.POST)
+//    protected String signIn(HttpServletRequest req) {
+//        HttpSession session = req.getSession();
+//        UserConfirmDto user = service.signIn(req);
+//
+//        if (user == null) {
+//            return "redirect:" + req.getScheme() + "://localhost:8088/signIn";
+//        } else if (user.getState().equals(State.NOT_CONFIRMED)){
+//            session.setAttribute("current_user", user);
+//            return "redirect:" + req.getScheme() + "://localhost:8088/confirm";
+//        }
+//        else {
+//            session.setAttribute("current_user", user);
+//            return "redirect:" + req.getScheme() + "://localhost:8088/profile";
+//        }
+//    }
 }

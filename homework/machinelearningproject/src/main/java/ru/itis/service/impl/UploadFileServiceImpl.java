@@ -24,31 +24,12 @@ public class UploadFileServiceImpl implements UploadFileService {
     public void saveFile(MultipartFile file, UserConfirmDto user) {
 
         String name = file.getOriginalFilename();
-        String[] all = name.split("\\.");
         String allName = environment.getProperty("storage.path") + "/" + name;
         try {
             file.transferTo(Paths.get(allName));
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }
-        /*String pathDir ="uploads";
-        File dir = new File(pathDir);
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
-        String filename = file.getOriginalFilename();
-
-        try {
-            byte[] bytes = file.getBytes();
-            File loadFile = new File(dir.getAbsolutePath() + File.separator + filename);
-            System.out.println(loadFile.getAbsolutePath());
-            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(loadFile));
-            stream.write(bytes);
-            stream.flush();
-            stream.close();
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }*/
 
     }
 

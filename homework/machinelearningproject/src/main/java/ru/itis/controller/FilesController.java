@@ -59,20 +59,16 @@ public class FilesController {
 
     @RequestMapping(value = "/files/{file-name:.+}", method = RequestMethod.GET)
     public ModelAndView getFile(@PathVariable("file-name") String fileName, HttpSession session, HttpServletResponse response) {
-        // TODO: найти на диске
         UserConfirmDto user = (UserConfirmDto) session.getAttribute("current_user");
         if (user != null) {
             File file = fileService.findFile(fileName);
-            // TODO: отдать пользователю
             response.setHeader("Content-disposition", "attachment;filename=" + fileName);
             response.setContentType("application/vnd.ms-excel");
             try {
                 Files.copy(file.toPath(), response.getOutputStream());
                 response.getOutputStream().flush();
             } catch (IOException e) {
-                //LOG.info("Error writing file to output stream. Filename was '{}'" + fileName, e);
-                //throw new RuntimeException("IOError writing file to output stream");
-                e.printStackTrace();
+                throw new RuntimeException("IOError writing file to output stream");
             }
         }
         return null;
